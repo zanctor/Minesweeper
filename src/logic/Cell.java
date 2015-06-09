@@ -1,10 +1,16 @@
 package logic;
 
-public class Cell {
+import javax.swing.*;
+
+public class Cell extends JButton {
     private boolean isMine;
     private boolean isEmpty;
     private boolean isFlag;
     private int number;
+
+    Cell(String string){
+        setText(string);
+    }
 
     public boolean getIsFlag() {
         return isFlag;

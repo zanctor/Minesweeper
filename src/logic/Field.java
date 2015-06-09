@@ -1,13 +1,14 @@
 package logic;
 
 import javax.swing.*;
+
 import java.util.*;
 
 public class Field {
-    JPanel panel;
+    public static final JPanel panel = new JPanel();
     private boolean isWin;
-    int width;
-    int height;
+    private static int width;
+    private static int height;
     List field[][];
     Random random = new Random();
 
@@ -16,7 +17,7 @@ public class Field {
         setHeight(height);
     }
 
-    public int getWidth() {
+    public static int getWidth() {
         return width;
     }
 
@@ -24,7 +25,7 @@ public class Field {
         this.width = width;
     }
 
-    public int getHeight() {
+    public static int getHeight() {
         return height;
     }
 
@@ -44,14 +45,14 @@ public class Field {
         for (int i = 0; i <= getWidth(); i++){
             for (int j = 0; i <= getHeight(); i++){
                 //filling of List
-                field[i][j].add(new JButton(String.valueOf(random.nextInt(8)+1)));
+                field[i][j].add(new Cell(String.valueOf(random.nextInt(8) + 1)));
             }
         }
     }
     void createBattleField(){
         for (int i = 0; i <= getWidth() ; i++){
             for (int j = 0; j <= getHeight() ; j++){
-                panel.add((JButton)field[i][j]);
+                panel.add((Cell)field[i][j]);
             }
         }
     }
