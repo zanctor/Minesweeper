@@ -1,4 +1,4 @@
-import swing.*;
+import swing.Window;
 
 public class Game {
     final static Window window = new Window();

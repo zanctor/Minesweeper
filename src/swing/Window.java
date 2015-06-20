@@ -5,48 +5,58 @@ import javax.swing.*;
 import logic.Field;
 
 public class Window extends JFrame {
-    JFrame gameFrame;
-    JFrame getSizeFrame;
+    JFrame gameFrame, getSizeFrame;
     JButton insertBtn;
-    JTextField txtWidth, txtHeight;
-    JLabel lblWidth, lblHeight;
+    JTextField txtWidth, txtHeight, txtMines;
+    JLabel lblWidth, lblHeight, lblMines;
+    Field mineField;
 
     public void gameStart() {
-        setWindow();
-        callGame();
+        callWindows();
     }
 
-    public void setWindow() {
+    public void callWindows() {
         getSizeFrame = new JFrame("Width and height of the field");
-        gameFrame.setSize(500, 500);
+        getSizeFrame.setSize(450, 400);
         getSizeFrame.setLayout(null);
         getSizeFrame.setVisible(true);
-        getSizeFrame.setSize(300, 300);
         getSizeFrame.add(insertBtn = new JButton("Insert values"));
         getSizeFrame.add(lblWidth = new JLabel("Input number of cells of width: "));
-        getSizeFrame.add(txtWidth = new JTextField("0"));
+        getSizeFrame.add(txtWidth = new JTextField());
         getSizeFrame.add(lblHeight = new JLabel("Input number of cells of height: "));
-        getSizeFrame.add(txtHeight = new JTextField("0"));
-        insertBtn.setBounds(200, 200, 50, 20);
-        lblWidth.setBounds(200, 200, 50, 20);
-        txtWidth.setBounds(200, 200, 50, 20);
-        lblHeight.setBounds(200, 200, 50, 20);
-        txtHeight.setBounds(200, 200, 50, 20);
+        getSizeFrame.add(txtHeight = new JTextField());
+        getSizeFrame.add(lblMines = new JLabel("Input number of mines: "));
+        getSizeFrame.add(txtMines = new JTextField());
+        getSizeFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        insertBtn.setBounds(200, 350, 150, 30);
+        lblWidth.setBounds(50, 50, 250, 30);
+        txtWidth.setBounds(50, 100, 50, 30);
+        lblHeight.setBounds(50, 150, 250, 30);
+        txtHeight.setBounds(50, 200, 50, 30);
+        lblMines.setBounds(50, 250, 250, 30);
+        txtMines.setBounds(50, 300, 50, 30);
         insertBtn.addActionListener(e -> {
-            if (Integer.parseInt(txtWidth.getText()) != 0 && Integer.parseInt(txtHeight.getText()) != 0) {
-                new Field(Integer.parseInt(txtWidth.getText()), Integer.parseInt(txtHeight.getText()));
+           try {
+             mineField = new Field(Integer.parseInt(txtWidth.getText()), Integer.parseInt(txtHeight.getText()));
+             mineField.setMinesNumber(Integer.parseInt(txtMines.getText()));
+           } catch (Exception e1) {
+               JOptionPane.showMessageDialog(getSizeFrame, "Insert correct values!");
+           }
+            if (mineField.getWidth() != 0 && mineField.getHeight() != 0) {
+                getSizeFrame.setVisible(false);
+                gameFrame = new JFrame();
+                gameFrame.setSize(500,500);
+                gameFrame.setLayout(null);
+                gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                for (int i = 1; i < mineField.getWidth(); i++){
+                    for (int j = 1; j < mineField.getHeight(); j++){
+                        gameFrame.add(mineField.field[i][j]);
+                    }
+                }
+                gameFrame.setTitle("Minesweeper");
+                gameFrame.setVisible(true);
             }
-        });}
-
-    public void callGame() {
-        if (Field.getWidth() != 0 && Field.getHeight() != 0) {
-            getSizeFrame.setVisible(false);
-            gameFrame = new JFrame();
-            gameFrame.add(Field.panel);
-            gameFrame.setTitle("Minesweeper");
-            gameFrame.setVisible(true);
-        }
+        });
     }
-
 }
 

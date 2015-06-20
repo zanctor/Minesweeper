@@ -3,13 +3,28 @@ package logic;
 import javax.swing.*;
 
 public class Cell extends JButton {
-    private boolean isMine;
-    private boolean isEmpty;
-    private boolean isFlag;
-    private int number;
+    private boolean isMine, isEmpty, isFlag;
+    private int number, horizontal, vertical;
 
-    Cell(String string){
-        setText(string);
+    public int getHorizontal() {
+        return horizontal;
+    }
+
+    public void setHorizontal(int horizontal) {
+        this.horizontal = horizontal;
+    }
+
+    public int getVertical() {
+        return vertical;
+    }
+
+    public void setVertical(int vertical) {
+        this.vertical = vertical;
+    }
+
+    Cell(int horizontal, int vertical) {
+        setHorizontal(horizontal);
+        setVertical(vertical);
     }
 
     public boolean getIsFlag() {
@@ -43,10 +58,5 @@ public class Cell extends JButton {
     public void setIsMine(boolean isMine) {
         this.isMine = isMine;
     }
-
-
-
-
-
 
 }

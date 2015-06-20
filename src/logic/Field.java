@@ -1,31 +1,35 @@
 package logic;
 
-import javax.swing.*;
-
 import java.util.*;
 
 public class Field {
-    public static final JPanel panel = new JPanel();
     private boolean isWin;
-    private static int width;
-    private static int height;
-    List field[][];
+    private int width, height, mines_number;
+    public  Cell field[][] = new Cell[30][30];
     Random random = new Random();
+
+    public int getMinesNumber() {
+        return mines_number;
+    }
+
+    public void setMinesNumber(int minesNumber) {
+        mines_number = minesNumber;
+    }
 
     public Field(int width, int height){
         setWidth(width);
         setHeight(height);
+        generateField();
+        generateMines();
     }
 
-    public static int getWidth() {
+    public  int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
+    public void setWidth(int width) { this.width = width; }
 
-    public static int getHeight() {
+    public  int getHeight() {
         return height;
     }
 
@@ -41,20 +45,32 @@ public class Field {
         this.isWin = isWin;
     }
 
-    void genField(){
-        for (int i = 0; i <= getWidth(); i++){
-            for (int j = 0; i <= getHeight(); i++){
-                //filling of List
-                field[i][j].add(new Cell(String.valueOf(random.nextInt(8) + 1)));
-            }
-        }
-    }
-    void createBattleField(){
-        for (int i = 0; i <= getWidth() ; i++){
-            for (int j = 0; j <= getHeight() ; j++){
-                panel.add((Cell)field[i][j]);
+    private void generateField(){
+        for (int i = 1; i < getWidth(); i++){
+            for (int j = 1; j < getHeight(); j++){
+                //filling of the buttons array
+                field[i][j] = new Cell(i,j);
+                field[i][j].setBounds(30*i, 30*j, 30, 30);
+                // TODO make left-clicking and right-clicking listeners
             }
         }
     }
 
+    private void generateMines() {
+        for (int i = 1; i < getWidth(); i++) {
+            for (int j = 1; j < getHeight(); j++) {
+                if (getMinesNumber() != 0){
+                    field[i][j].setIsMine(random.nextBoolean());
+                    if (field[i][j].getIsMine()){
+                        field[i][j].setText("*");
+                        setMinesNumber(getMinesNumber() - 1);
+                    }
+                }
+            }
+        }
+    }
+
+    private void generateNumber(){
+
+    }
 }
