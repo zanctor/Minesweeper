@@ -5,7 +5,7 @@ import javax.swing.*;
 import logic.Field;
 
 public class Window extends JFrame {
-    JFrame gameFrame, getSizeFrame;
+    public static JFrame gameFrame, getSizeFrame;
     JButton insertBtn;
     JTextField txtWidth, txtHeight, txtMines;
     JLabel lblWidth, lblHeight, lblMines;
@@ -37,8 +37,8 @@ public class Window extends JFrame {
         txtMines.setBounds(50, 300, 50, 30);
         insertBtn.addActionListener(e -> {
            try {
-             mineField = new Field(Integer.parseInt(txtWidth.getText()), Integer.parseInt(txtHeight.getText()));
-             mineField.setMinesNumber(Integer.parseInt(txtMines.getText()));
+             mineField = new Field(Integer.parseInt(txtWidth.getText()), Integer.parseInt(txtHeight.getText()), Integer.parseInt(txtMines.getText()));
+
            } catch (Exception e1) {
                JOptionPane.showMessageDialog(getSizeFrame, "Insert correct values!");
            }
@@ -48,11 +48,12 @@ public class Window extends JFrame {
                 gameFrame.setSize(500,500);
                 gameFrame.setLayout(null);
                 gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                for (int i = 1; i < mineField.getWidth(); i++){
-                    for (int j = 1; j < mineField.getHeight(); j++){
+                for (int i = 0 ; i < mineField.getWidth(); i++){
+                    for (int j = 0; j < mineField.getHeight(); j++){
                         gameFrame.add(mineField.field[i][j]);
                     }
                 }
+                gameFrame.repaint();
                 gameFrame.setTitle("Minesweeper");
                 gameFrame.setVisible(true);
             }

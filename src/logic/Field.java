@@ -1,35 +1,60 @@
 package logic;
 
+import swing.Window;
+
+import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 
 public class Field {
-    private boolean isWin;
-    private int width, height, mines_number;
-    public  Cell field[][] = new Cell[30][30];
+    // some fields are the general abstract parameters of the game(ex. isLose or isWin)
+    private boolean isWin, isLose;
+    private int remainingMines;
+    private int width, height, minesNumber;
+    public Cell field[][] = new Cell[30][30];
     Random random = new Random();
 
+    public Field(int width, int height, int minesNumber) {
+        setWidth(width);
+        setHeight(height);
+        setMinesNumber(minesNumber);
+        generateField();
+    }
+
+    public int getRemainingMines() {
+        return remainingMines;
+    }
+
+    public void setRemainingMines(int remainingMines) {
+        this.remainingMines = remainingMines;
+    }
+
     public int getMinesNumber() {
-        return mines_number;
+        return minesNumber;
     }
 
     public void setMinesNumber(int minesNumber) {
-        mines_number = minesNumber;
+        this.minesNumber = minesNumber;
     }
 
-    public Field(int width, int height){
-        setWidth(width);
-        setHeight(height);
-        generateField();
-        generateMines();
+    public boolean getIsLose() {
+        return isLose;
     }
 
-    public  int getWidth() {
+    public void setIsLose(boolean isLose) {
+        this.isLose = isLose;
+    }
+
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) { this.width = width; }
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
-    public  int getHeight() {
+    public int getHeight() {
         return height;
     }
 
@@ -45,32 +70,75 @@ public class Field {
         this.isWin = isWin;
     }
 
-    private void generateField(){
-        for (int i = 1; i < getWidth(); i++){
-            for (int j = 1; j < getHeight(); j++){
+    private void generateField() {
+        for (int i = 0; i < getWidth(); i++) {
+            for (int j = 0; j < getHeight(); j++) {
                 //filling of the buttons array
-                field[i][j] = new Cell(i,j);
-                field[i][j].setBounds(30*i, 30*j, 30, 30);
-                // TODO make left-clicking and right-clicking listeners
+                field[i][j] = new Cell(i, j);
+                field[i][j].setBounds(40 * i, 40 * j, 40, 40);
+            }
+        }
+        generateMines();
+        generateListeners();
+    }
+
+    public void generateListeners() {
+        for (int i = 0; i < getWidth(); i++) {
+            for (int j = 0; j < getHeight(); j++) {
+                final int finalI = i;
+                final int finalJ = j;
+                field[i][j].addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+                        if (e.getButton() == MouseEvent.BUTTON1){
+                            if(field[finalI][finalJ].getIsMine()) {
+                                wipeField();
+                                setIsLose(true);
+                                JOptionPane.showMessageDialog(Window.gameFrame, "Game over!");
+                            }
+                        }
+
+                        if (e.getButton() == MouseEvent.BUTTON3) {
+
+                            if (!field[finalI][finalJ].getIsFlag()) {
+                                field[finalI][finalJ].setText("f");
+                                field[finalI][finalJ].setIsFlag(true);
+                            } else if (field[finalI][finalJ].getIsFlag()) {
+                                if (!field[finalI][finalJ].getIsMine()) {
+                                    field[finalI][finalJ].setText("");
+                                    field[finalI][finalJ].setIsFlag(false);
+                                } else if (field[finalI][finalJ].getIsMine()) {
+                                    field[finalI][finalJ].setText("*");
+                                    field[finalI][finalJ].setIsFlag(false);
+                                }
+                            }
+
+                        }
+                    }
+                });
             }
         }
     }
 
     private void generateMines() {
-        for (int i = 1; i < getWidth(); i++) {
-            for (int j = 1; j < getHeight(); j++) {
-                if (getMinesNumber() != 0){
-                    field[i][j].setIsMine(random.nextBoolean());
-                    if (field[i][j].getIsMine()){
-                        field[i][j].setText("*");
-                        setMinesNumber(getMinesNumber() - 1);
-                    }
-                }
-            }
+        int i, j;
+        for (int o = 0; o < getMinesNumber(); o++) {
+            i = random.nextInt(getWidth());
+            j = random.nextInt(getHeight());
+            field[i][j].setIsMine(true);
+            field[i][j].setText("*");
         }
     }
 
-    private void generateNumber(){
+    private void generateNumbers() {
+
+    }
+
+    public void wipeField() {
+        for (int i = 0; i < getWidth(); i++) {
+            for (int j = 0; j < getHeight(); j++) {
+                field[i][j].setEnabled(false);
+            }
+        }
 
     }
 }
