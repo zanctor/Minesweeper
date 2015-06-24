@@ -1,23 +1,35 @@
 package swing;
 
 import javax.swing.*;
+import java.awt.*;
 
 import logic.Field;
 
+
+
 public class Window extends JFrame {
     public static JFrame gameFrame, getSizeFrame;
-    JButton insertBtn;
+    JButton insertBtn, restartBtn;
     JTextField txtWidth, txtHeight, txtMines;
     JLabel lblWidth, lblHeight, lblMines;
+    public static JLabel lblFlags;
     Field mineField;
+    ImageIcon icon = new ImageIcon("icon.png");
+    Image im = Toolkit.getDefaultToolkit().getImage("icon.png");
 
     public void gameStart() {
         callWindows();
     }
 
     public void callWindows() {
-        getSizeFrame = new JFrame("Width and height of the field");
-        getSizeFrame.setSize(450, 400);
+        callGetSize();
+        callGameFrame();
+    }
+
+    public void callGetSize() {
+        getSizeFrame = new JFrame("Width and height of the mine field");
+        getSizeFrame.setIconImage(im);
+        getSizeFrame.setSize(450, 450);
         getSizeFrame.setLayout(null);
         getSizeFrame.setVisible(true);
         getSizeFrame.add(insertBtn = new JButton("Insert values"));
@@ -35,29 +47,58 @@ public class Window extends JFrame {
         txtHeight.setBounds(50, 200, 50, 30);
         lblMines.setBounds(50, 250, 250, 30);
         txtMines.setBounds(50, 300, 50, 30);
-        insertBtn.addActionListener(e -> {
-           try {
-             mineField = new Field(Integer.parseInt(txtWidth.getText()), Integer.parseInt(txtHeight.getText()), Integer.parseInt(txtMines.getText()));
+    }
 
-           } catch (Exception e1) {
-               JOptionPane.showMessageDialog(getSizeFrame, "Insert correct values!");
-           }
-            if (mineField.getWidth() != 0 && mineField.getHeight() != 0) {
+    public void callGameFrame() {
+        insertBtn.addActionListener(e -> {
+            try {
+                mineField = new Field(Integer.parseInt(txtWidth.getText()), Integer.parseInt(txtHeight.getText()), Integer.parseInt(txtMines.getText()));
+
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(getSizeFrame, "Insert correct values!");
+                e1.printStackTrace();
+            }
+            if (Field.getWidth() != 0 && Field.getHeight() != 0) {
                 getSizeFrame.setVisible(false);
-                gameFrame = new JFrame();
-                gameFrame.setSize(500,500);
+                gameFrame = new JFrame("Minesweeper");
+                gameFrame.setIconImage(im);
+                gameFrame.add(lblFlags = new JLabel("00"));
+                restartBtn = new JButton(icon);
+                gameFrame.add(restartBtn);
+                restartBtn.setBounds(600, 500, 64, 64);
+                restartBtn.addActionListener(e2 -> {
+                    removingField();
+                    mineField = new Field(Field.getWidth(), Field.getHeight(), Field.getMinesNumber());
+                    imaginatingField();
+                    lblFlags.setText(Integer.toString(mineField.getRemainingFlags()));
+                    gameFrame.repaint();
+                });
+                lblFlags.setText(Integer.toString(mineField.getRemainingFlags()));
+                lblFlags.setEnabled(false);
+                lblFlags.setBounds(600, 600, 100, 50);
+                gameFrame.setSize(70 * Field.getWidth(), 70 * Field.getHeight());
                 gameFrame.setLayout(null);
                 gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                for (int i = 0 ; i < mineField.getWidth(); i++){
-                    for (int j = 0; j < mineField.getHeight(); j++){
-                        gameFrame.add(mineField.field[i][j]);
-                    }
-                }
+                imaginatingField();
                 gameFrame.repaint();
-                gameFrame.setTitle("Minesweeper");
                 gameFrame.setVisible(true);
             }
         });
+    }
+
+    public void imaginatingField(){
+        for (int i = 0; i < Field.getHeight(); i++) {
+            for (int j = 0; j < Field.getWidth(); j++) {
+                gameFrame.add(mineField.field[i][j]);
+            }
+        }
+    }
+    public void removingField(){
+        for (int i = 0; i < Field.getHeight(); i++) {
+            for (int j = 0; j < Field.getWidth(); j++) {
+                gameFrame.remove(mineField.field[i][j]);
+            }
+        }
     }
 }
 

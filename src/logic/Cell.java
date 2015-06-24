@@ -2,30 +2,9 @@ package logic;
 
 import javax.swing.*;
 
-public class Cell extends JToggleButton {
+public class Cell extends JButton {
     private boolean isMine, isEmpty, isFlag, isNumber;
     private int number, horizontal, vertical;
-
-    public int getHorizontal() {
-        return horizontal;
-    }
-
-    public void setHorizontal(int horizontal) {
-        this.horizontal = horizontal;
-    }
-
-    public int getVertical() {
-        return vertical;
-    }
-
-    public void setVertical(int vertical) {
-        this.vertical = vertical;
-    }
-
-    Cell(int horizontal, int vertical) {
-        setHorizontal(horizontal);
-        setVertical(vertical);
-    }
 
     public boolean getIsNumber() {
         return isNumber;
