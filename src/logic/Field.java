@@ -209,7 +209,6 @@ public class Field {
             field[i][j].setIsMine(true);
             field[i][j].setIsEmpty(false);
             field[i][j].setText("");
-            System.out.println("AZA " + i + " " + j);
         }
 
     }
