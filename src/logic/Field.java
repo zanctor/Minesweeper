@@ -11,12 +11,11 @@ import swing.Window;
 
 public class Field {
     private boolean isWin, isLose;
-    private int remainingMines, remainingFlags;
-    private static int width, height, minesNumber;
+    private int remainingMines, remainingFlags, width, height, minesNumber;
     public Cell[][] field;
-    Random random = new Random();
-    Font font = new Font("Verdana", Font.BOLD, 16);
-    ImageIcon im = new ImageIcon("images/flag.png");
+    private Random random = new Random();
+    private Font font = new Font("Verdana", Font.BOLD, 16);
+    private ImageIcon im = new ImageIcon("images/flag.png");
 
     public Field(int width, int height, int minesNumber) {
         setWidth(width);
@@ -45,12 +44,12 @@ public class Field {
         this.remainingMines = remainingMines;
     }
 
-    public static int getMinesNumber() {
+    public  int getMinesNumber() {
         return minesNumber;
     }
 
-    public static void setMinesNumber(int minesNumber) {
-        Field.minesNumber = minesNumber;
+    public  void setMinesNumber(int minesNumber) {
+        this.minesNumber = minesNumber;
     }
 
     public boolean getIsLose() {
@@ -61,20 +60,20 @@ public class Field {
         this.isLose = isLose;
     }
 
-    public static int getWidth() {
+    public  int getWidth() {
         return width;
     }
 
-    public static void setWidth(int width) {
-        Field.width = width;
+    public  void setWidth(int width) {
+        this.width = width;
     }
 
-    public static int getHeight() {
+    public  int getHeight() {
         return height;
     }
 
-    public static void setHeight(int height) {
-        Field.height = height;
+    public  void setHeight(int height) {
+        this.height = height;
     }
 
     public boolean getIsWin() {
@@ -106,18 +105,23 @@ public class Field {
                 final int FinalJ = j;
                 field[i][j].addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
-
+                        //left-clicking events
                         if (e.getButton() == MouseEvent.BUTTON1) {
-                            if (field[FinalI][FinalJ].getIsMine()) {
-                                if (field[FinalI][FinalJ].getIsFlag()) {
-                                    setRemainingFlags(getRemainingFlags() + 1);
-                                }
+
+                            if (field[FinalI][FinalJ].getIsMine() && field[FinalI][FinalJ].isEnabled()) {
+                                field[FinalI][FinalJ].setText("*");
+                                field[FinalI][FinalJ].setBackground(Color.RED);
                                 for (int i = 0; i < getHeight(); i++) {
                                     for (int j = 0; j < getWidth(); j++) {
-                                        if (field[i][j].getIsMine()) {
-                                            field[i][j].setText("*");
-                                            field[i][j].setIcon(null);
-                                            field[i][j].setBackground(Color.RED);
+                                        if (i != FinalI || j != FinalJ) {
+                                            if (field[i][j].getIsMine()) {
+                                                field[i][j].setText("*");
+                                                field[i][j].setIcon(null);
+                                                field[i][j].setBackground(Color.YELLOW);
+                                            } else if (field[i][j].getIsNumber()) {
+                                                field[i][j].setIcon(null);
+                                                field[i][j].setText("" + Integer.toString(field[i][j].getNumber()));
+                                            }
                                         }
                                     }
                                 }
@@ -143,9 +147,9 @@ public class Field {
                                 field[FinalI][FinalJ].setEnabled(false);
                             }
                         }
-
+                        //right-clicking events
                         if (e.getButton() == MouseEvent.BUTTON3) {
-                            if (!field[FinalI][FinalJ].getIsFlag()) {
+                            if (!field[FinalI][FinalJ].getIsFlag() && field[FinalI][FinalJ].isEnabled()) {
                                 if (field[FinalI][FinalJ].getIsMine()) {
                                     field[FinalI][FinalJ].setIsFlag(true);
                                     setRemainingMines(getRemainingMines() - 1);
@@ -157,28 +161,29 @@ public class Field {
                                     field[FinalI][FinalJ].setIcon(im);
                                     field[FinalI][FinalJ].setIsFlag(true);
                                     setRemainingFlags(getRemainingFlags() - 1);
-                                    Window.txtFlags.setText( Integer.toString(getRemainingFlags()));
+                                    Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
                                 }
-                            } else if (field[FinalI][FinalJ].getIsFlag() && !field[FinalI][FinalJ].getIsMine()) {
+                            } else if (field[FinalI][FinalJ].getIsFlag() && !field[FinalI][FinalJ].getIsMine() && field[FinalI][FinalJ].isEnabled()) {
 
                                 if (field[FinalI][FinalJ].getIsNumber()) {
                                     field[FinalI][FinalJ].setIsFlag(false);
                                     field[FinalI][FinalJ].setIcon(null);
+                                    field[FinalI][FinalJ].setText("" + field[FinalI][FinalJ].getNumber());
                                     setRemainingFlags(getRemainingFlags() + 1);
-                                    Window.txtFlags.setText( Integer.toString(getRemainingFlags()));
+                                    Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
                                 } else if (field[FinalI][FinalJ].getIsEmpty()) {
                                     field[FinalI][FinalJ].setIcon(null);
                                     field[FinalI][FinalJ].setIsFlag(false);
                                     setRemainingFlags(getRemainingFlags() + 1);
-                                    Window.txtFlags.setText( Integer.toString(getRemainingFlags()));
+                                    Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
                                 }
-                            } else if (field[FinalI][FinalJ].getIsFlag() && field[FinalI][FinalJ].getIsMine()) {
+                            } else if (field[FinalI][FinalJ].getIsFlag() && field[FinalI][FinalJ].getIsMine() && field[FinalI][FinalJ].isEnabled()) {
                                 field[FinalI][FinalJ].setText("");
                                 field[FinalI][FinalJ].setIsFlag(false);
                                 field[FinalI][FinalJ].setIcon(null);
                                 setRemainingMines(getRemainingMines() + 1);
                                 setRemainingFlags(getRemainingFlags() + 1);
-                                Window.txtFlags.setText( Integer.toString(getRemainingFlags()));
+                                Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
                             }
 
                             if (getRemainingMines() == 0 && getRemainingFlags() == 0) {
@@ -201,14 +206,17 @@ public class Field {
         }
     }
 
-
     private void generateMines() {
-        for (int o = 0; o < getMinesNumber(); o++) {
+        int o = 0;
+        while (o < getMinesNumber()) {
             int i = random.nextInt(getHeight());
             int j = random.nextInt(getWidth());
-            field[i][j].setIsMine(true);
-            field[i][j].setIsEmpty(false);
-            field[i][j].setText("");
+            if (!field[i][j].getIsMine()) {
+                field[i][j].setIsMine(true);
+                field[i][j].setIsEmpty(false);
+                field[i][j].setText("");
+                o++;
+            }
         }
 
     }
@@ -216,167 +224,168 @@ public class Field {
     private void generateNumbers() {
         for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
+                // TODO: Make correct numeration of the last row
                 int mines = 0;
                 if (field[i][j].getIsEmpty()) {
                     if (i == 0 && j == 0) {
                         if (field[i][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
                     } else if (i == getHeight() - 1 && j == 0) {
                         if (field[getHeight() - 1][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 2][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 2][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
                     } else if (i == 0 && j == getWidth() - 1) {
                         if (field[i + 1][getWidth() - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i][getWidth() - 2].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][getWidth() - 2].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
                     } else if (i == 0) {
                         if (field[i + 1][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i][j - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][j - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
                     } else if (j == 0) {
                         if (field[i - 1][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i - 1][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
                     } else if (i == getHeight() - 1 && j == getWidth() - 1) {
                         if (field[getHeight() - 2][getWidth() - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 1][getWidth() - 2].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 2][getWidth() - 2].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
                     } else if (i == getHeight() - 1) {
                         if (field[getHeight() - 1][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 2][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 1][j - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 2][j - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 2][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
                     } else if (j == getWidth() - 1) {
                         if (field[getHeight() - 1][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 2][j - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 1][j - 2].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 2][j - 2].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[getHeight() - 2][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
                     } else {
                         if (field[i - 1][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i][j - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][j].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i - 1][j - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i + 1][j - 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
 
                         if (field[i - 1][j + 1].getIsMine()) {
-                            ++mines;
+                            mines++;
                         }
                     }
                 }
