@@ -26,6 +26,7 @@ public class Field {
         setRemainingFlags(getMinesNumber());
         setRemainingMines(getMinesNumber());
         generateField();
+        Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
     }
 
     public int getRemainingFlags() {
@@ -150,13 +151,13 @@ public class Field {
                                     setRemainingMines(getRemainingMines() - 1);
                                     setRemainingFlags(getRemainingFlags() - 1);
                                     field[FinalI][FinalJ].setIcon(im);
-                                    Window.lblFlags.setText(Integer.toString(getRemainingFlags()));
+                                    Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
                                 } else if (field[FinalI][FinalJ].getIsNumber() || field[FinalI][FinalJ].getIsEmpty()) {
                                     field[FinalI][FinalJ].setText("");
                                     field[FinalI][FinalJ].setIcon(im);
                                     field[FinalI][FinalJ].setIsFlag(true);
                                     setRemainingFlags(getRemainingFlags() - 1);
-                                    Window.lblFlags.setText(Integer.toString(getRemainingFlags()));
+                                    Window.txtFlags.setText( Integer.toString(getRemainingFlags()));
                                 }
                             } else if (field[FinalI][FinalJ].getIsFlag() && !field[FinalI][FinalJ].getIsMine()) {
 
@@ -164,12 +165,12 @@ public class Field {
                                     field[FinalI][FinalJ].setIsFlag(false);
                                     field[FinalI][FinalJ].setIcon(null);
                                     setRemainingFlags(getRemainingFlags() + 1);
-                                    Window.lblFlags.setText(Integer.toString(getRemainingFlags()));
+                                    Window.txtFlags.setText( Integer.toString(getRemainingFlags()));
                                 } else if (field[FinalI][FinalJ].getIsEmpty()) {
                                     field[FinalI][FinalJ].setIcon(null);
                                     field[FinalI][FinalJ].setIsFlag(false);
                                     setRemainingFlags(getRemainingFlags() + 1);
-                                    Window.lblFlags.setText(Integer.toString(getRemainingFlags()));
+                                    Window.txtFlags.setText( Integer.toString(getRemainingFlags()));
                                 }
                             } else if (field[FinalI][FinalJ].getIsFlag() && field[FinalI][FinalJ].getIsMine()) {
                                 field[FinalI][FinalJ].setText("");
@@ -177,7 +178,7 @@ public class Field {
                                 field[FinalI][FinalJ].setIcon(null);
                                 setRemainingMines(getRemainingMines() + 1);
                                 setRemainingFlags(getRemainingFlags() + 1);
-                                Window.lblFlags.setText(Integer.toString(getRemainingFlags()));
+                                Window.txtFlags.setText( Integer.toString(getRemainingFlags()));
                             }
 
                             if (getRemainingMines() == 0 && getRemainingFlags() == 0) {
@@ -195,8 +196,6 @@ public class Field {
                         }
 
                     }
-
-
                 });
             }
         }
@@ -205,11 +204,12 @@ public class Field {
 
     private void generateMines() {
         for (int o = 0; o < getMinesNumber(); o++) {
-            int i = random.nextInt(getWidth());
-            int j = random.nextInt(getHeight());
+            int i = random.nextInt(getHeight());
+            int j = random.nextInt(getWidth());
             field[i][j].setIsMine(true);
             field[i][j].setIsEmpty(false);
             field[i][j].setText("");
+            System.out.println("AZA " + i + " " + j);
         }
 
     }

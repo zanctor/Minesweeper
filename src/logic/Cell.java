@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class Cell extends JButton {
     private boolean isMine, isEmpty, isFlag, isNumber;
-    private int number, horizontal, vertical;
+    private int number;
 
     public boolean getIsNumber() {
         return isNumber;
