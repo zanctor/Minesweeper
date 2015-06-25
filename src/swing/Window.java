@@ -16,8 +16,8 @@ public class Window extends JFrame {
     public static JTextField txtFlags = new JTextField();
     private Field mineField;
     Font font = new Font("Verdana", Font.BOLD, 16);
-    ImageIcon icon = new ImageIcon("icon.png");
-    Image im = Toolkit.getDefaultToolkit().getImage("icon.png");
+    ImageIcon icon = new ImageIcon("images/icon.png");
+    Image im = Toolkit.getDefaultToolkit().getImage("images/icon.png");
 
     public void gameStart() {
         callWindows();

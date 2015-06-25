@@ -16,7 +16,7 @@ public class Field {
     public Cell[][] field;
     Random random = new Random();
     Font font = new Font("Verdana", Font.BOLD, 16);
-    ImageIcon im = new ImageIcon("flag.png");
+    ImageIcon im = new ImageIcon("images/flag.png");
 
     public Field(int width, int height, int minesNumber) {
         setWidth(width);
