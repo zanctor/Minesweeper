@@ -12,7 +12,7 @@ import swing.Window;
 public class Field {
     private boolean isWin, isLose;
     private int remainingMines, remainingFlags, width, height, minesNumber;
-    public Cell[][] field;
+    private Cell[][] field;
     private Random random = new Random();
     private Font font = new Font("Verdana", Font.BOLD, 16);
     private ImageIcon im = new ImageIcon("images/flag.png");
@@ -26,6 +26,10 @@ public class Field {
         setRemainingMines(getMinesNumber());
         generateField();
         Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
+    }
+
+    public Cell getField(int i, int j) {
+        return field[i][j];
     }
 
     public int getRemainingFlags() {
@@ -88,9 +92,9 @@ public class Field {
         for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
                 field[i][j] = new Cell();
-                field[i][j].setFont(font);
-                field[i][j].setBounds(50 * i, 50 * j, 50, 50);
-                field[i][j].setIsEmpty(true);
+                getField(i ,j).setFont(font);
+                getField(i ,j).setBounds(50 * i, 50 * j, 50, 50);
+                getField(i ,j).setIsEmpty(true);
             }
         }
         generateMines();
@@ -103,24 +107,25 @@ public class Field {
             for (int j = 0; j < getWidth(); j++) {
                 final int FinalI = i;
                 final int FinalJ = j;
-                field[i][j].addMouseListener(new MouseAdapter() {
+                getField(i ,j).addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
                         //left-clicking events
                         if (e.getButton() == MouseEvent.BUTTON1) {
 
-                            if (field[FinalI][FinalJ].getIsMine() && field[FinalI][FinalJ].isEnabled()) {
-                                field[FinalI][FinalJ].setText("*");
-                                field[FinalI][FinalJ].setBackground(Color.RED);
+                            if (getField(FinalI, FinalJ).getIsMine() && getField(FinalI, FinalJ).isEnabled()) {
+                                getField(FinalI, FinalJ).setIcon(null);
+                                getField(FinalI, FinalJ).setText("*");
+                                getField(FinalI, FinalJ).setBackground(Color.RED);
                                 for (int i = 0; i < getHeight(); i++) {
                                     for (int j = 0; j < getWidth(); j++) {
                                         if (i != FinalI || j != FinalJ) {
-                                            if (field[i][j].getIsMine()) {
-                                                field[i][j].setText("*");
-                                                field[i][j].setIcon(null);
-                                                field[i][j].setBackground(Color.YELLOW);
-                                            } else if (field[i][j].getIsNumber()) {
-                                                field[i][j].setIcon(null);
-                                                field[i][j].setText("" + Integer.toString(field[i][j].getNumber()));
+                                            if (getField(i, j).getIsMine()) {
+                                                getField(i, j).setText("*");
+                                                getField(i, j).setIcon(null);
+                                                getField(i, j).setBackground(Color.YELLOW);
+                                            } else if (getField(i, j).getIsNumber()) {
+                                                getField(i, j).setIcon(null);
+                                                getField(i, j).setText("" + Integer.toString(getField(i, j).getNumber()));
                                             }
                                         }
                                     }
@@ -130,57 +135,55 @@ public class Field {
                                 JOptionPane.showMessageDialog(Window.gameFrame, "Game over!");
                             }
 
-                            if (field[FinalI][FinalJ].getIsNumber()) {
-                                if (field[FinalI][FinalJ].getIsFlag()) {
+                            if (getField(FinalI, FinalJ).getIsNumber()) {
+                                if (getField(FinalI, FinalJ).getIsFlag()) {
                                     setRemainingFlags(getRemainingFlags() + 1);
                                 }
-                                field[FinalI][FinalJ].setEnabled(false);
-                                field[FinalI][FinalJ].setIcon(null);
-                                field[FinalI][FinalJ].setText("" + field[FinalI][FinalJ].getNumber());
+                                getField(FinalI, FinalJ).setEnabled(false);
+                                getField(FinalI, FinalJ).setIcon(null);
+                                getField(FinalI, FinalJ).setText("" + getField(FinalI, FinalJ).getNumber());
                             }
 
-                            if (field[FinalI][FinalJ].getIsEmpty()) {
-                                if (field[FinalI][FinalJ].getIsFlag()) {
+                            if (getField(FinalI, FinalJ).getIsEmpty()) {
+                                if (getField(FinalI, FinalJ).getIsFlag()) {
                                     setRemainingFlags(getRemainingFlags() + 1);
                                 }
-                                field[FinalI][FinalJ].setIcon(null);
-                                field[FinalI][FinalJ].setEnabled(false);
+                                getField(FinalI, FinalJ).setIcon(null);
+                                getField(FinalI, FinalJ).setEnabled(false);
                             }
                         }
                         //right-clicking events
                         if (e.getButton() == MouseEvent.BUTTON3) {
-                            if (!field[FinalI][FinalJ].getIsFlag() && field[FinalI][FinalJ].isEnabled()) {
-                                if (field[FinalI][FinalJ].getIsMine()) {
-                                    field[FinalI][FinalJ].setIsFlag(true);
+                            if (!getField(FinalI, FinalJ).getIsFlag() && getField(FinalI, FinalJ).isEnabled()) {
+                                if (getField(FinalI, FinalJ).getIsMine()) {
+                                    getField(FinalI, FinalJ).setIsFlag(true);
                                     setRemainingMines(getRemainingMines() - 1);
                                     setRemainingFlags(getRemainingFlags() - 1);
-                                    field[FinalI][FinalJ].setIcon(im);
+                                    getField(FinalI, FinalJ).setIcon(im);
                                     Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
-                                } else if (field[FinalI][FinalJ].getIsNumber() || field[FinalI][FinalJ].getIsEmpty()) {
-                                    field[FinalI][FinalJ].setText("");
-                                    field[FinalI][FinalJ].setIcon(im);
-                                    field[FinalI][FinalJ].setIsFlag(true);
+                                } else if (getField(FinalI, FinalJ).getIsNumber() || getField(FinalI, FinalJ).getIsEmpty()) {
+                                    getField(FinalI, FinalJ).setText("");
+                                    getField(FinalI, FinalJ).setIcon(im);
+                                    getField(FinalI, FinalJ).setIsFlag(true);
                                     setRemainingFlags(getRemainingFlags() - 1);
                                     Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
                                 }
-                            } else if (field[FinalI][FinalJ].getIsFlag() && !field[FinalI][FinalJ].getIsMine() && field[FinalI][FinalJ].isEnabled()) {
+                            } else if (getField(FinalI, FinalJ).getIsFlag() && !getField(FinalI, FinalJ).getIsMine() && getField(FinalI, FinalJ).isEnabled()) {
 
-                                if (field[FinalI][FinalJ].getIsNumber()) {
-                                    field[FinalI][FinalJ].setIsFlag(false);
-                                    field[FinalI][FinalJ].setIcon(null);
-                                    field[FinalI][FinalJ].setText("" + field[FinalI][FinalJ].getNumber());
+                                if (getField(FinalI, FinalJ).getIsNumber()) {
+                                    getField(FinalI, FinalJ).setIsFlag(false);
+                                    getField(FinalI, FinalJ).setIcon(null);
                                     setRemainingFlags(getRemainingFlags() + 1);
                                     Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
-                                } else if (field[FinalI][FinalJ].getIsEmpty()) {
-                                    field[FinalI][FinalJ].setIcon(null);
-                                    field[FinalI][FinalJ].setIsFlag(false);
+                                } else if (getField(FinalI, FinalJ).getIsEmpty()) {
+                                    getField(FinalI, FinalJ).setIcon(null);
+                                    getField(FinalI, FinalJ).setIsFlag(false);
                                     setRemainingFlags(getRemainingFlags() + 1);
                                     Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
                                 }
-                            } else if (field[FinalI][FinalJ].getIsFlag() && field[FinalI][FinalJ].getIsMine() && field[FinalI][FinalJ].isEnabled()) {
-                                field[FinalI][FinalJ].setText("");
-                                field[FinalI][FinalJ].setIsFlag(false);
-                                field[FinalI][FinalJ].setIcon(null);
+                            } else if (getField(FinalI, FinalJ).getIsFlag() && getField(FinalI, FinalJ).getIsMine() && getField(FinalI, FinalJ).isEnabled()) {
+                                getField(FinalI, FinalJ).setIsFlag(false);
+                                getField(FinalI, FinalJ).setIcon(null);
                                 setRemainingMines(getRemainingMines() + 1);
                                 setRemainingFlags(getRemainingFlags() + 1);
                                 Window.txtFlags.setText(Integer.toString(getRemainingFlags()));
@@ -189,8 +192,8 @@ public class Field {
                             if (getRemainingMines() == 0 && getRemainingFlags() == 0) {
                                 for (int i = 0; i < getHeight(); i++) {
                                     for (int j = 0; j < getWidth(); j++) {
-                                        if (field[i][j].getIsMine()) {
-                                            field[i][j].setBackground(Color.GREEN);
+                                        if (getField(i, j).getIsMine()) {
+                                            getField(i, j).setBackground(Color.GREEN);
                                         }
                                     }
                                 }
@@ -199,7 +202,6 @@ public class Field {
                                 JOptionPane.showMessageDialog(Window.gameFrame, "You are victorious!");
                             }
                         }
-
                     }
                 });
             }
@@ -211,201 +213,197 @@ public class Field {
         while (o < getMinesNumber()) {
             int i = random.nextInt(getHeight());
             int j = random.nextInt(getWidth());
-            if (!field[i][j].getIsMine()) {
-                field[i][j].setIsMine(true);
-                field[i][j].setIsEmpty(false);
-                field[i][j].setText("");
+            if (!getField(i ,j).getIsMine()) {
+                getField(i ,j).setIsMine(true);
+                getField(i ,j).setIsEmpty(false);
+                getField(i ,j).setText("");
                 o++;
             }
         }
-
     }
 
     private void generateNumbers() {
         for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
-                // TODO: Make correct numeration of the last row
                 int mines = 0;
-                if (field[i][j].getIsEmpty()) {
+                if (getField(i ,j).getIsEmpty()) {
                     if (i == 0 && j == 0) {
-                        if (field[i][j + 1].getIsMine()) {
+                        if (getField(i, j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][j].getIsMine()) {
+                        if (getField(i + 1, j).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][j + 1].getIsMine()) {
+                        if (getField(i + 1, j + 1).getIsMine()) {
                             mines++;
                         }
                     } else if (i == getHeight() - 1 && j == 0) {
-                        if (field[getHeight() - 1][j + 1].getIsMine()) {
+                        if (getField(getHeight() - 1, j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 2][j + 1].getIsMine()) {
+                        if (getField(getHeight() - 2, j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 2][j].getIsMine()) {
+                        if (getField(getHeight() - 2, j).getIsMine()) {
                             mines++;
                         }
                     } else if (i == 0 && j == getWidth() - 1) {
-                        if (field[i + 1][getWidth() - 1].getIsMine()) {
+                        if (getField(i + 1, getWidth() - 2).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i][getWidth() - 2].getIsMine()) {
+                        if (getField(i, getWidth() - 2).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][getWidth() - 2].getIsMine()) {
+                        if (getField(i + 1, getWidth() - 2).getIsMine()) {
                             mines++;
                         }
                     } else if (i == 0) {
-                        if (field[i + 1][j + 1].getIsMine()) {
+                        if (getField(i + 1, j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i][j + 1].getIsMine()) {
+                        if (getField(i, j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i][j - 1].getIsMine()) {
+                        if (getField(i , j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][j - 1].getIsMine()) {
+                        if (getField(i + 1 , j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][j].getIsMine()) {
+                        if (getField(i + 1, j).getIsMine()) {
                             mines++;
                         }
                     } else if (j == 0) {
-                        if (field[i - 1][j + 1].getIsMine()) {
+                        if (getField(i - 1 , j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i - 1][j].getIsMine()) {
+                        if (getField(i - 1, j).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][j].getIsMine()) {
+                        if (getField(i + 1, j).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][j + 1].getIsMine()) {
+                        if (getField(i + 1, j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i][j + 1].getIsMine()) {
+                        if (getField(i, j + 1).getIsMine()) {
                             mines++;
                         }
                     } else if (i == getHeight() - 1 && j == getWidth() - 1) {
-                        if (field[getHeight() - 2][getWidth() - 1].getIsMine()) {
+                        if (getField(i - 1, j).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 1][getWidth() - 2].getIsMine()) {
+                        if (getField(i, j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 2][getWidth() - 2].getIsMine()) {
+                        if (getField(i - 1, j - 1).getIsMine()) {
                             mines++;
                         }
                     } else if (i == getHeight() - 1) {
-                        if (field[getHeight() - 1][j + 1].getIsMine()) {
+                        if (getField(i, j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 2][j].getIsMine()) {
+                        if (getField(i - 1, j).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 1][j - 1].getIsMine()) {
+                        if (getField(i, j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 2][j - 1].getIsMine()) {
+                        if (getField(i - 1, j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 2][j + 1].getIsMine()) {
+                        if (getField(i - 1, j + 1).getIsMine()) {
                             mines++;
                         }
                     } else if (j == getWidth() - 1) {
-                        if (field[getHeight() - 1][j].getIsMine()) {
+                        if (getField(i + 1, j).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 2][j - 1].getIsMine()) {
+                        if (getField(i - 1, j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 1][j - 2].getIsMine()) {
+                        if (getField(i + 1, j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 2][j - 2].getIsMine()) {
+                        if (getField(i, j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[getHeight() - 2][j].getIsMine()) {
+                        if (getField(i - 1, j).getIsMine()) {
                             mines++;
                         }
                     } else {
-                        if (field[i - 1][j].getIsMine()) {
+                        if (getField(i - 1, j).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i][j - 1].getIsMine()) {
+                        if (getField(i , j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][j].getIsMine()) {
+                        if (getField(i + 1, j).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i][j + 1].getIsMine()) {
+                        if (getField(i, j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i - 1][j - 1].getIsMine()) {
+                        if (getField(i - 1, j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][j + 1].getIsMine()) {
+                        if (getField(i + 1, j + 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i + 1][j - 1].getIsMine()) {
+                        if (getField(i + 1 , j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (field[i - 1][j + 1].getIsMine()) {
+                        if (getField(i - 1 , j + 1).getIsMine()) {
                             mines++;
                         }
                     }
                 }
 
                 if (mines != 0) {
-                    field[i][j].setIsNumber(true);
-                    field[i][j].setNumber(mines);
-                    field[i][j].setIsEmpty(false);
+                    getField(i ,j).setIsNumber(true);
+                    getField(i ,j).setNumber(mines);
+                    getField(i ,j).setIsEmpty(false);
                 }
             }
         }
-
     }
 
     public void wipeField() {
         for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
-                field[i][j].setEnabled(false);
+                getField(i ,j).setEnabled(false);
             }
         }
-
     }
 }

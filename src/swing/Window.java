@@ -104,9 +104,9 @@ public class Window {
         for (int i = 0; i < mineField.getHeight(); i++) {
             for (int j = 0; j < mineField.getWidth(); j++) {
                 if (h == 1) {
-                    minePnl.add(mineField.field[i][j]);
+                    minePnl.add(mineField.getField(i,j));
                 } else if(h == 2) {
-                    minePnl.remove(mineField.field[i][j]);
+                    minePnl.remove(mineField.getField(i,j));
                 }
             }
         }
