@@ -20,10 +20,6 @@ public class Window {
     private Image im = Toolkit.getDefaultToolkit().getImage("images/icon.png");
 
     public void gameStart() {
-        callWindows();
-    }
-
-    public void callWindows() {
         callGetSize();
         callGameFrame();
     }

@@ -48,11 +48,11 @@ public class Field {
         this.remainingMines = remainingMines;
     }
 
-    public  int getMinesNumber() {
+    public int getMinesNumber() {
         return minesNumber;
     }
 
-    public  void setMinesNumber(int minesNumber) {
+    public void setMinesNumber(int minesNumber) {
         this.minesNumber = minesNumber;
     }
 
@@ -64,19 +64,19 @@ public class Field {
         this.isLose = isLose;
     }
 
-    public  int getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public  void setWidth(int width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
-    public  int getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public  void setHeight(int height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
@@ -92,9 +92,9 @@ public class Field {
         for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
                 field[i][j] = new Cell();
-                getField(i ,j).setFont(font);
-                getField(i ,j).setBounds(50 * i, 50 * j, 50, 50);
-                getField(i ,j).setIsEmpty(true);
+                getField(i, j).setFont(font);
+                getField(i, j).setBounds(50 * i, 50 * j, 50, 50);
+                getField(i, j).setIsEmpty(true);
             }
         }
         generateMines();
@@ -107,7 +107,7 @@ public class Field {
             for (int j = 0; j < getWidth(); j++) {
                 final int FinalI = i;
                 final int FinalJ = j;
-                getField(i ,j).addMouseListener(new MouseAdapter() {
+                getField(i, j).addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
                         //left-clicking events
                         if (e.getButton() == MouseEvent.BUTTON1) {
@@ -213,10 +213,10 @@ public class Field {
         while (o < getMinesNumber()) {
             int i = random.nextInt(getHeight());
             int j = random.nextInt(getWidth());
-            if (!getField(i ,j).getIsMine()) {
-                getField(i ,j).setIsMine(true);
-                getField(i ,j).setIsEmpty(false);
-                getField(i ,j).setText("");
+            if (!getField(i, j).getIsMine()) {
+                getField(i, j).setIsMine(true);
+                getField(i, j).setIsEmpty(false);
+                getField(i, j).setText("");
                 o++;
             }
         }
@@ -226,8 +226,9 @@ public class Field {
         for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
                 int mines = 0;
-                if (getField(i ,j).getIsEmpty()) {
+                if (getField(i, j).getIsEmpty()) {
                     if (i == 0 && j == 0) {
+
                         if (getField(i, j + 1).getIsMine()) {
                             mines++;
                         }
@@ -239,7 +240,9 @@ public class Field {
                         if (getField(i + 1, j + 1).getIsMine()) {
                             mines++;
                         }
+
                     } else if (i == getHeight() - 1 && j == 0) {
+
                         if (getField(getHeight() - 1, j + 1).getIsMine()) {
                             mines++;
                         }
@@ -251,7 +254,9 @@ public class Field {
                         if (getField(getHeight() - 2, j).getIsMine()) {
                             mines++;
                         }
+
                     } else if (i == 0 && j == getWidth() - 1) {
+
                         if (getField(i + 1, getWidth() - 2).getIsMine()) {
                             mines++;
                         }
@@ -263,7 +268,9 @@ public class Field {
                         if (getField(i + 1, getWidth() - 2).getIsMine()) {
                             mines++;
                         }
+
                     } else if (i == 0) {
+
                         if (getField(i + 1, j + 1).getIsMine()) {
                             mines++;
                         }
@@ -272,19 +279,21 @@ public class Field {
                             mines++;
                         }
 
-                        if (getField(i , j - 1).getIsMine()) {
+                        if (getField(i, j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (getField(i + 1 , j - 1).getIsMine()) {
+                        if (getField(i + 1, j - 1).getIsMine()) {
                             mines++;
                         }
 
                         if (getField(i + 1, j).getIsMine()) {
                             mines++;
                         }
+
                     } else if (j == 0) {
-                        if (getField(i - 1 , j + 1).getIsMine()) {
+
+                        if (getField(i - 1, j + 1).getIsMine()) {
                             mines++;
                         }
 
@@ -303,7 +312,9 @@ public class Field {
                         if (getField(i, j + 1).getIsMine()) {
                             mines++;
                         }
+
                     } else if (i == getHeight() - 1 && j == getWidth() - 1) {
+
                         if (getField(i - 1, j).getIsMine()) {
                             mines++;
                         }
@@ -315,7 +326,9 @@ public class Field {
                         if (getField(i - 1, j - 1).getIsMine()) {
                             mines++;
                         }
+
                     } else if (i == getHeight() - 1) {
+
                         if (getField(i, j + 1).getIsMine()) {
                             mines++;
                         }
@@ -335,7 +348,9 @@ public class Field {
                         if (getField(i - 1, j + 1).getIsMine()) {
                             mines++;
                         }
+
                     } else if (j == getWidth() - 1) {
+
                         if (getField(i + 1, j).getIsMine()) {
                             mines++;
                         }
@@ -355,12 +370,14 @@ public class Field {
                         if (getField(i - 1, j).getIsMine()) {
                             mines++;
                         }
+
                     } else {
+
                         if (getField(i - 1, j).getIsMine()) {
                             mines++;
                         }
 
-                        if (getField(i , j - 1).getIsMine()) {
+                        if (getField(i, j - 1).getIsMine()) {
                             mines++;
                         }
 
@@ -380,20 +397,20 @@ public class Field {
                             mines++;
                         }
 
-                        if (getField(i + 1 , j - 1).getIsMine()) {
+                        if (getField(i + 1, j - 1).getIsMine()) {
                             mines++;
                         }
 
-                        if (getField(i - 1 , j + 1).getIsMine()) {
+                        if (getField(i - 1, j + 1).getIsMine()) {
                             mines++;
                         }
                     }
                 }
 
                 if (mines != 0) {
-                    getField(i ,j).setIsNumber(true);
-                    getField(i ,j).setNumber(mines);
-                    getField(i ,j).setIsEmpty(false);
+                    getField(i, j).setIsNumber(true);
+                    getField(i, j).setNumber(mines);
+                    getField(i, j).setIsEmpty(false);
                 }
             }
         }
@@ -402,7 +419,7 @@ public class Field {
     public void wipeField() {
         for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
-                getField(i ,j).setEnabled(false);
+                getField(i, j).setEnabled(false);
             }
         }
     }
